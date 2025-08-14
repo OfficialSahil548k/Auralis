@@ -4,11 +4,13 @@ const mongoose = require('mongoose');
 Port = 8800;
 const listing = require('./models/listing.js');
 const path = require('path');
+const methodOverride = require('method-override');
 
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname,'views'))
+app.set('views', path.join(__dirname,'views'));
 app.use(express.urlencoded({extended : true}));
+app.use(methodOverride('_method'));
 
 
 const MongoURL = 'mongodb://127.0.0.1:27017/Auralis';
@@ -26,7 +28,9 @@ main()
     });
 
 app.get('/',(req,res)=>{
-    res.send("welcome to wonderLust!");
+    res.send(
+        "Welcome to Auralis!, checkout the route => /listing"
+    );
 });
 
 app.get('/listing', async (req,res)=>{
@@ -58,10 +62,25 @@ app.post('/listing', async(req,res)=>{
 })
 
 app.get('/listing/:id/edit', async (req,res) =>{
-    let {id} = req.params;
-    let list = listing.find({id : id});
-    res.render('edit.ejs',list);
+    const {id} = req.params;
+    const list = await listing.findById(id);
+    res.render('edit.ejs',{list});
 });
+
+app.put('/listing/:id', async (req,res) =>{
+    const {id} = await req.params;
+    const {title, description, price, location, country} = await req.body;
+    await listing.findOneAndUpdate({_id : id}, {title : title, description : description, price : price, location : location, country : country});
+    res.redirect(`/listing/${id}`);
+});
+
+app.delete('/listing/:id', async (req,res)=>{
+    const {id} = req.params;
+    await listing.deleteOne({_id : id});
+    console.log("Successfully deleted");
+    res.redirect('/listing');
+})
+
 app.listen(Port,  () =>{
     console.log(`app is running on http://localhost:${Port}`);
 });
