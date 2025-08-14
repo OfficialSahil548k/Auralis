@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auralis</title>
+</head>
+<body>
+    <h1>All Places</h1>
+    <a href="/listing/new"><button>Create new</button></a>
+    <ul>
+    <% for(let list of allListing){ %>
+       <li><a href="/listing/<%=list._id%>"><%= list.title %></a></li>
+    <% } %>
+    </ul>
+</body>
+</html>
