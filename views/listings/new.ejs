@@ -1,0 +1,66 @@
+<% layout('/layouts/boilerplate') %>
+<body>
+  <div class="row">
+    <div class="col-8 offset-2">
+      <h1>Enter new Location :</h1>
+      <form action="/listing" method="POST">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title : </label>
+          <input
+            type="text"
+            name="title"
+            placeholder="enter title"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description : </label>
+          <textarea
+            name="description"
+            placeholder="Enter Description"
+            class="form-control"
+          ></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="image" class="form-label">Image Link : </label>
+          <input
+            type="url"
+            name="image"
+            placeholder="enter image URL/link"
+            class="form-control"
+          />
+        </div>
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label for="price" class="form-label">Price : </label>
+            <input
+              type="number"
+              name="price"
+              placeholder="enter price"
+              class="form-control"
+            />
+          </div>
+          <div class="mb-3 col-md-8">
+            <label for="country" class="form-label">Country : </label>
+            <input
+              type="text"
+              name="Ccuntry"
+              placeholder="enter Country"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="location" class="form-label">Location : </label>
+          <input
+            type="text"
+            name="location"
+            placeholder="enter Location"
+            class="form-control"
+          />
+        </div>
+        <button type="submit" class="btn btn-dark add-btn">ADD</button>
+      </form>
+    </div>
+  </div>
+</body>

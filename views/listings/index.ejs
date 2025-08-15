@@ -1,0 +1,30 @@
+<% layout('/layouts/boilerplate') %>
+<style>
+      h1{
+    display: flex;
+    justify-content: center;
+    color: rgb(0, 0, 0);
+    align-items: center;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 900;
+  }
+</style>
+<body>
+  <h1>All Locations</h1>
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+    <% for(let list of allListing){ %>
+        <a href="/listing/<%=list._id%>" style="text-decoration: none;">
+    <div class="card col" style="width: 25rem">
+      <img src="<%= list.image.url %>" class="card-img-top" alt="place image" style="height: 25rem"/>
+      <div class="card-body">
+        <div class="card-img-overlay"></div>
+        <h5 class="card-title"><%= list.title %></h5>
+        <p class="card-text">
+          &#8377;<%=list.price.toLocaleString("en-In")%>/night
+        </p>
+      </div>
+    </div>
+    </a>
+    <% } %>
+  </div>
+</body>

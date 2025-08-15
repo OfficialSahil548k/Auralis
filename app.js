@@ -1,17 +1,19 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-Port = 8800;
+const Port = 8800;
 const listing = require('./models/listing.js');
 const path = require('path');
 const methodOverride = require('method-override');
+const engine = require('ejs-mate');
 
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname,'views'));
 app.use(express.urlencoded({extended : true}));
 app.use(methodOverride('_method'));
-
+app.engine('ejs',engine);
+app.use(express.static(path.join(__dirname,'/public')));
 
 const MongoURL = 'mongodb://127.0.0.1:27017/Auralis';
 
@@ -28,25 +30,22 @@ main()
     });
 
 app.get('/',(req,res)=>{
-    res.send(
-        "Welcome to Auralis!, checkout the route => /listing"
-    );
+    res.render('listings/home.ejs');
 });
 
 app.get('/listing', async (req,res)=>{
     let allListing = await listing.find({});
-    res.render('index.ejs',{allListing})
+    res.render('listings/index.ejs',{allListing})
 });
 
 app.get('/listing/new', async (req,res) =>{
-    console.log("opening new form")
-    res.render('new.ejs');
+    res.render('listings/new.ejs');
 });
 
 app.get('/listing/:id', async (req,res) =>{
     let {id} = req.params;
     const list = await listing.findById(id);
-    res.render('show.ejs',{list});
+    res.render('listings/show.ejs',{list});
 });
 
 app.post('/listing', async(req,res)=>{
@@ -64,7 +63,7 @@ app.post('/listing', async(req,res)=>{
 app.get('/listing/:id/edit', async (req,res) =>{
     const {id} = req.params;
     const list = await listing.findById(id);
-    res.render('edit.ejs',{list});
+    res.render('listings/edit.ejs',{list});
 });
 
 app.put('/listing/:id', async (req,res) =>{
@@ -82,5 +81,5 @@ app.delete('/listing/:id', async (req,res)=>{
 })
 
 app.listen(Port,  () =>{
-    console.log(`app is running on http://localhost:${Port}`);
+    console.log(`app is running on http://localhost:${Port}/`);
 });
