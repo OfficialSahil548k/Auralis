@@ -3,61 +3,72 @@
   <div class="row">
     <div class="col-8 offset-2">
       <h1>Enter new Location :</h1>
-      <form action="/listing" method="POST">
+      <form action="/listing" method="POST" novalidate class="needs-validation">
         <div class="mb-3">
           <label for="title" class="form-label">Title : </label>
           <input
             type="text"
-            name="title"
+            name="listing[title]"
             placeholder="enter title"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Please enter valid Title.</div>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description : </label>
           <textarea
-            name="description"
+            name="listing[description]"
             placeholder="Enter Description"
             class="form-control"
+            required
           ></textarea>
+          <div class="invalid-feedback">Please enter the Correct description of the Location</div>
         </div>
         <div class="mb-3">
           <label for="image" class="form-label">Image Link : </label>
           <input
             type="url"
-            name="image"
+            name="listing[image]"
             placeholder="enter image URL/link"
             class="form-control"
           />
+          <div class="invalid-feedback">Please Provide the valid url.</div>
         </div>
         <div class="row">
           <div class="mb-3 col-md-4">
             <label for="price" class="form-label">Price : </label>
             <input
-              type="number"
-              name="price"
+              
+              name="listing[price]"
               placeholder="enter price"
               class="form-control"
+              required
             />
+            <div class="invalid-feedback">Please enter the valid price</div>
           </div>
           <div class="mb-3 col-md-8">
             <label for="country" class="form-label">Country : </label>
             <input
               type="text"
-              name="Ccuntry"
+              name="listing[Ccuntry]"
               placeholder="enter Country"
               class="form-control"
+              required
             />
+            <div class="invalid-feedback">Enter the valid country</div>
           </div>
         </div>
         <div class="mb-3">
           <label for="location" class="form-label">Location : </label>
           <input
             type="text"
-            name="location"
+            name="listing[location]"
             placeholder="enter Location"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Location must be Correct.</div>
         </div>
         <button type="submit" class="btn btn-dark add-btn">ADD</button>
       </form>
