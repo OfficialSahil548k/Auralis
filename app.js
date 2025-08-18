@@ -24,16 +24,18 @@ async function main() {
     await mongoose.connect(MongoURL);
 }
 
-const validateListing = (re,res,next) =>{
+const validateListing = (req,res,next) =>{
     const data = req.body.listing;
     let {error} = listingSchema.validate(data);
+    // console.log(error)
+    
     if (error) {
-        let errMsg = error.details.map((el) =>{
-            
-        })
-        throw new ExpressError(400, "Send Valid data of location");
+        let errMsg = error.details.map((el) => el.message).join(",");
+       return  next(new ExpressError(400,errMsg));
     }
+    next() ;
 }
+
 
 main()
     .then(() => {
@@ -74,8 +76,9 @@ app.get('/listing/:id/edit', WrapAsync(async (req, res) => {
     res.render('listings/edit.ejs', { list });
 }));
 
-app.put('/listing/:id',validateListing, WrapAsync(async (req, res) => {
+app.put('/listing/:id',validateListing,WrapAsync(async (req, res) => {
     const { id } = req.params;
+    
     if (!req.body || !req.body.listing) {
         throw new ExpressError(400, "Send Valid data of location");
     }
