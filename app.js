@@ -45,38 +45,47 @@ main()
         console.log(err);
     });
 
+// Home Page
 app.get('/', (req, res) => {
     res.render('listings/home.ejs');
 });
 
+// Index route
 app.get('/listing', WrapAsync(async (req, res, next) => {
     let allListing = await listing.find({});
     res.render('listings/index.ejs', { allListing })
 })
 );
 
+
+//new page
 app.get('/listing/new', WrapAsync(async (req, res) => {
     res.render('listings/new.ejs');
 }));
 
+//show route
 app.get('/listing/:id', WrapAsync(async (req, res) => {
     let { id } = req.params;
     const list = await listing.findById(id);
     res.render('listings/show.ejs', { list });
 }));
 
+// new Route
 app.post('/listing',validateListing, WrapAsync(async (req, res, next) => {
     const newListing = new listing(req.body.listing);
     await newListing.save();
-    res.redirect('/listing');
+    res.redirect(`/listing`);
 }));
 
+
+//edit page
 app.get('/listing/:id/edit', WrapAsync(async (req, res) => {
     const { id } = req.params;
     const list = await listing.findById(id);
     res.render('listings/edit.ejs', { list });
 }));
 
+// edit Route
 app.put('/listing/:id',validateListing,WrapAsync(async (req, res) => {
     const { id } = req.params;
     
@@ -87,6 +96,8 @@ app.put('/listing/:id',validateListing,WrapAsync(async (req, res) => {
     res.redirect(`/listing/${id}`);
 }));
 
+
+//Delete Route
 app.delete('/listing/:id', WrapAsync(async (req, res) => {
     const { id } = req.params;
     await listing.deleteOne({ _id: id });
@@ -94,17 +105,15 @@ app.delete('/listing/:id', WrapAsync(async (req, res) => {
     res.redirect('/listing');
 }));
 
+//Review Route
 app.post('/listing/:id/reviews' ,async (req,res)=>{
     let List = await listing.findById(req.params.id);
     let newReview = new Review(req.body.review);
-
     List.reviews.push(newReview);
-
     await newReview.save();
     await List.save();
-
-    res.redirect(`/listing/${req.params.id}`);
-})
+    res.redirect(`/listing/${List._id}`);
+});
 
 app.use((req, res, next) => {
     next(new ExpressError(404, 'Page Not Found'));
