@@ -23,13 +23,15 @@
             class="form-control"
             required
           ></textarea>
-          <div class="invalid-feedback">Please enter the Correct description of the Location</div>
+          <div class="invalid-feedback">
+            Please enter the Correct description of the Location
+          </div>
         </div>
         <div class="mb-3">
           <label for="image" class="form-label">Image Link : </label>
           <input
             type="url"
-            name="listing[image]"
+            name="listing[image][url]"
             placeholder="enter image URL/link"
             class="form-control"
           />
@@ -39,7 +41,6 @@
           <div class="mb-3 col-md-4">
             <label for="price" class="form-label">Price : </label>
             <input
-              
               name="listing[price]"
               placeholder="enter price"
               class="form-control"

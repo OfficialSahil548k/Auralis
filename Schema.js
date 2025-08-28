@@ -1,10 +1,15 @@
-const joi = require('joi');
+const Joi = require("joi");
 
-module.exports.listingSchema = joi.object({
-    title : joi.string().required(),
-    description : joi.string().required(),
-    location : joi.string().required(),
-    country : joi.string().required(),
-    price : joi.number().required().min(0),
-    image : joi.string().allow("",null)
-}).required(); // Describes the listing object directly
+module.exports.listingSchema = Joi.object({
+  title: Joi.string().required(),
+  description: Joi.string().allow("", null), // optional like in Mongoose
+  location: Joi.string().required(),
+  country: Joi.string().required(),
+  price: Joi.number().min(0).required(),
+
+  // match image object structure
+  image: Joi.object({
+    url: Joi.string().uri().allow("", null), // can be empty → Mongoose default kicks in
+    filename: Joi.string().allow("", null),
+  }).optional(),
+}).required();
