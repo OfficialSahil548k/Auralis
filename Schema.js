@@ -9,7 +9,7 @@ module.exports.listingSchema = Joi.object({
 
   // match image object structure
   image: Joi.object({
-    url: Joi.string().uri().allow("", null), // can be empty → Mongoose default kicks in
+    url: Joi.string().uri().allow("", null), // can be empty
     filename: Joi.string().allow("", null),
   }).optional(),
 }).required();
