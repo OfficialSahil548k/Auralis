@@ -14,7 +14,7 @@
   <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
     <% for(let list of allListing){ %>
         <a href="/listing/<%=list._id%>" style="text-decoration: none;">
-    <div class="card col" style="width: 25rem">
+    <div class="card col listing-card" style="width: 25rem">
       <img src="<%= list.image.url %>" class="card-img-top" alt="place image" style="height: 25rem"/>
       <div class="card-body">
         <div class="card-img-overlay"></div>
