@@ -2,23 +2,25 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Port = 8800;
-const listing = require("./models/listing.js");
-const path = require("path");
-const methodOverride = require("method-override");
-const engine = require("ejs-mate");
-const WrapAsync = require("./utils/WrapAsync.js");
-const ExpressError = require("./utils/ExpressError.js");
-const Joi = require("joi");
-const { listingSchema } = require("./Schema.js");
-const Review = require("./models/reviews.js");
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(express.urlencoded({ extended: true }));
+const listing = require('./models/listing.js');
+const path = require('path');
+const methodOverride = require('method-override');
+const engine = require('ejs-mate');
+const WrapAsync = require('./utils/WrapAsync.js');
+const ExpressError = require('./utils/ExpressError.js');
+const Joi = require('joi');
+const { listingSchema } = require('./Schema.js');
+const Review = require('./models/reviews.js');
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
-app.use(methodOverride("_method"));
-app.engine("ejs", engine);
-app.use(express.static(path.join(__dirname, "/public")));
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
+app.engine('ejs', engine);
+app.use(express.static(path.join(__dirname, '/public')));
+
 
 const MongoURL = "mongodb://127.0.0.1:27017/Auralis";
 async function main() {
@@ -125,15 +127,19 @@ app.delete(
 );
 
 //Review Route
-app.post("/listing/:id/reviews", async (req, res) => {
-  let List = await listing.findById(req.params.id);
-  let newReview = new Review(req.body.review);
-  List.reviews.push(newReview);
-  await newReview.save();
-  await List.save();
-  res.redirect(`/listing/${List._id}`);
+
+app.post('/listing/:id/reviews' ,async (req,res)=>{
+      const {id} = req.params;
+      let List = await listing.findById(id);
+      let newReview = new Review(req.body.review)
+      List.reviews.push(newReview);
+      await newReview.save();
+      await List.save();
+      res.redirect(`/listing/${id}`);
+
 });
 
+   
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
 });
@@ -143,6 +149,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("listings/error.ejs", { message });
   // res.status(statusCode).send(message);
 });
+
 
 app.listen(Port, () => {
   console.log(`app is running on http://localhost:${Port}/`);
