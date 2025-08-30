@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Port = 8800;
 const path = require('path');
 const methodOverride = require('method-override');
-const engine = require('ejs-mate');
+const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError.js');
 const ListingRoutes = require('./routes/listing.js');
 const ReviewRoutes = require('./routes/review.js');
@@ -15,7 +15,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
-app.engine('ejs', engine);
+app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, '/public')));
 
 
