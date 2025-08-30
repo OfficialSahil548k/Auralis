@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const listing = require('../models/listing.js');
-const WrapAsync = require('../utils/WrapAsync.js');
-const { listingSchema } = require('../Schema.js');
-const ExpressError = require('../utils/ExpressError.js');
-
+const listing = require("../models/listing.js");
+const WrapAsync = require("../utils/WrapAsync.js");
+const { listingSchema } = require("../Schema.js");
+const ExpressError = require("../utils/ExpressError.js");
 
 const validateListing = (req, res, next) => {
   const data = req.body.listing;
@@ -40,10 +39,14 @@ router.get(
   WrapAsync(async (req, res) => {
     let { id } = req.params;
     const list = await listing.findById(id).populate("reviews");
-    res.render('listings/show.ejs', { list });
-}));
+    res.render("listings/show.ejs", { list });
+  })
+);
 
 // create route
+router.get("/reviewproper", async (req, res, next) => {
+  res.send("reviewrouter is working ");
+});
 router.post(
   "/",
   validateListing,

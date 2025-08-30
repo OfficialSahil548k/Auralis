@@ -10,8 +10,10 @@ const ListingRoutes = require('./routes/listing.js');
 const ReviewRoutes = require('./routes/review.js');
 
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+// -----------------------------------------parsing-----------------------------
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
@@ -38,11 +40,11 @@ app.get("/", (req, res) => {
 });
 
 // Listing Routes
-app.use('/listing', ListingRoutes);
+app.use("/listing", ListingRoutes);
 
 // Reviews Routes
 app.use("/listing/:id/reviews", ReviewRoutes);
-   
+
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
 });
@@ -52,7 +54,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("listings/error.ejs", { message });
   // res.status(statusCode).send(message);
 });
-
 
 app.listen(Port, () => {
   console.log(`app is running on http://localhost:${Port}/`);
