@@ -8,7 +8,7 @@ const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError.js');
 const ListingRoutes = require('./routes/listing.js');
 const ReviewRoutes = require('./routes/review.js');
-
+const cookieParser = require('cookie-parser');
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -34,8 +34,27 @@ main()
     console.log(err);
   });
 
+app.use(cookieParser("SecretKey"));
+
+// cookies
+app.get('/getcookies', (req,res) =>{
+  res.cookie("greet", "Byeee!", {signed : true});
+  res.send("cookies set");
+})
+
+app.get('/verify', (req,res)=>{
+  console.log(req.signedCookies);
+  res.send("Verified");
+})
+
+app.get('/greet',(req,res)=>{
+  let {name = "Guest"} = req.cookies;
+  res.send(`Hey ${name}, how are you?`);
+});
+
 // Home Page
 app.get("/", (req, res) => {
+  console.log(req.cookies);
   res.render("listings/home.ejs");
 });
 
