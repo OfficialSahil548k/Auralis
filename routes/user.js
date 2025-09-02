@@ -44,17 +44,3 @@ router.post('/login',
 });
 
 module.exports = router;
-
-    // let { username, email, password } = req.body;
-    // const user = User.findOne({ email: email, username: username });
-    // if (!user && !user.length) {
-    //     req.flash("error", "User doesn't exists");
-    //     res.redirect('/login');
-    // } else {
-    //     if (user.password != password) {
-    //         req.flash("error", "incorrect Password!");
-    //         res.redirect('/login');
-    //     }
-    //     req.flash("succes", "Login Successful");
-    //     req.redirect('/listing');
-    // }
