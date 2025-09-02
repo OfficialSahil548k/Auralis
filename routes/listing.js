@@ -65,6 +65,10 @@ router.get(
   WrapAsync(async (req, res) => {
     const { id } = req.params;
     const list = await listing.findById(id);
+    if (!list) {
+      req.flash("error", "location You Requested not found");
+      res.redirect("/listing");
+    }
     res.render("listings/edit.ejs", { list });
   })
 );
