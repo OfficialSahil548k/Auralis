@@ -5,6 +5,7 @@ const WrapAsync = require("../utils/WrapAsync.js");
 const { listingSchema } = require("../Schema.js");
 const ExpressError = require("../utils/ExpressError.js");
 
+
 const validateListing = (req, res, next) => {
   const data = req.body.listing;
   let { error } = listingSchema.validate(data);
@@ -44,9 +45,7 @@ router.get(
 );
 
 // create route
-router.get("/reviewproper", async (req, res, next) => {
-  res.send("reviewrouter is working ");
-});
+
 router.post(
   "/",
   validateListing,
