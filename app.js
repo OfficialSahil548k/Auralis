@@ -9,6 +9,36 @@ const ExpressError = require('./utils/ExpressError.js');
 const ListingRoutes = require('./routes/listing.js');
 const ReviewRoutes = require('./routes/review.js');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const flash = require('connect-flash');
+
+
+// Home Page
+app.get("/", (req, res) => {
+  res.render("listings/home.ejs");
+});
+
+// -----------------------------------------session and flash-----------------------------
+const SessionOptions = {
+  secret : "mySupersecretCode",
+  resave: false,
+  saveUninitialized: true,
+  cookie : {
+    expires : Date.now() + 7*24*60*60*1000,
+    maxAge : 7*24*60*60*1000,
+    HttpOnly : true
+  }
+};
+
+
+app.use(session(SessionOptions));
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -34,29 +64,6 @@ main()
     console.log(err);
   });
 
-app.use(cookieParser("SecretKey"));
-
-// cookies
-app.get('/getcookies', (req,res) =>{
-  res.cookie("greet", "Byeee!", {signed : true});
-  res.send("cookies set");
-})
-
-app.get('/verify', (req,res)=>{
-  console.log(req.signedCookies);
-  res.send("Verified");
-})
-
-app.get('/greet',(req,res)=>{
-  let {name = "Guest"} = req.cookies;
-  res.send(`Hey ${name}, how are you?`);
-});
-
-// Home Page
-app.get("/", (req, res) => {
-  console.log(req.cookies);
-  res.render("listings/home.ejs");
-});
 
 // Listing Routes
 app.use("/listing", ListingRoutes);
