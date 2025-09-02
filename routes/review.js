@@ -19,12 +19,7 @@ const validateReview = (req, res, next) => {
   next();
 };
 
-router.get("/reviewproper", async (req, res, next) => {
-  const id = req.params.id;
-  console.log(id);
-  res.send("reviewrouter is working ");
-});
-//Review Route
+// create Review Route
 router.post(
   "/",
   validateReview,
@@ -36,6 +31,7 @@ router.post(
     List.reviews.push(newReview);
     await newReview.save();
     await List.save();
+    req.flash("success", "Review Successfully added");
     res.redirect(`/listing/${id}`);
   })
 );
@@ -48,6 +44,7 @@ router.delete(
     await listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     await Review.findByIdAndDelete(reviewId);
     console.log("Successfully deleted review");
+    req.flash("success", "Review deleted");
     res.redirect(`/listing/${id}`);
   })
 );
