@@ -4,7 +4,7 @@ const listing = require("../models/listing.js");
 const WrapAsync = require("../utils/WrapAsync.js");
 const { listingSchema } = require("../Schema.js");
 const ExpressError = require("../utils/ExpressError.js");
-
+const mongoose = require("mongoose");
 const validateListing = (req, res, next) => {
   const data = req.body.listing;
   let { error } = listingSchema.validate(data);
@@ -37,8 +37,21 @@ router.get("/new", (req, res) => {
 //show route
 router.get(
   "/:id",
-  WrapAsync(async (req, res) => {
+  WrapAsync(async (req, res, next) => {
     let { id } = req.params;
+
+    // checks if the id is in the right format (mongodb objectId format) .
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return next(new ExpressError(400, "Id is not valid."));
+    }
+
+    // checks if the id exists in the listing collection.
+    const doc = await listing.findById(id);
+    if (!doc) {
+      return next(
+        new ExpressError(404, "Listing not found or has been deleted.")
+      );
+    }
     const list = await listing.findById(id).populate("reviews");
     if (!list) {
       req.flash("error", "location You Requested not found");
@@ -49,6 +62,7 @@ router.get(
 );
 
 // create route
+
 router.post(
   "/",
   validateListing,
