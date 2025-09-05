@@ -26,12 +26,13 @@ router.get(
 );
 
 //new page
-router.get(
-  "/new",
-  WrapAsync(async (req, res) => {
-    res.render("listings/new.ejs");
-  })
-);
+router.get("/new", (req, res) => {
+  if (!req.isAuthenticated()) {
+    req.flash("error", "You must be logged in before adding a location!");
+    return res.redirect('/login');
+  }
+  res.render("listings/new.ejs");
+});
 
 //show route
 router.get(
