@@ -49,7 +49,7 @@ router.get(
     const doc = await listing.findById(id);
     if (!doc) {
       return next(
-        new ExpressError(404, "Listing not found or has been deleted.")
+        new ExpressError(404, "Location not found or has been deleted.")
       );
     }
     const list = await listing.findById(id).populate("reviews");
