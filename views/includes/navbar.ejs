@@ -14,8 +14,15 @@
         <a class="nav-link" href="/">Home</a>
         <a class="nav-link" href="/listing">All Places</a>
         <a class="nav-link" href="/listing/new">Add new Place</a>
-        <a class="nav-link" href="/login">Login</a>
+      </div>
+      <div class="navbar-nav ms-auto">
+        <% if(!CurrUser){ %>
         <a class="nav-link" href="/signup">SignUp</a>
+        <a class="nav-link" href="/login">Login</a>
+        <% } %>
+        <% if(CurrUser){ %>
+        <a class="nav-link" href="/logout">LogOut</a>
+        <% } %>
       </div>
     </div>
   </div>
