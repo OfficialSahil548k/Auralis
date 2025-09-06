@@ -2,22 +2,9 @@ const express = require("express");
 const router = express.Router({ mergeParams: true }); // this is to merge the parents params into this router.
 // const router = express.Router();
 const WrapAsync = require("../utils/WrapAsync.js");
-const { reviewSchema } = require("../Schema.js");
-const ExpressError = require("../utils/ExpressError.js");
+const {validateReview} = require('../middlewares.js')
 const listing = require("../models/listing.js");
 const Review = require("../models/reviews.js");
-
-const validateReview = (req, res, next) => {
-  const data = req.body.listing;
-  console.log("listing", data);
-  let { error } = reviewSchema.validate(data);
-  // console.log(error)
-  if (error) {
-    let errMsg = error.details.map((el) => el.message).join(",");
-    return next(new ExpressError(400, errMsg));
-  }
-  next();
-};
 
 // create Review Route
 router.post(

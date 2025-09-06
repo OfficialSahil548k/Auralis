@@ -95,13 +95,19 @@ body{
     flex: 1;
 }
 
+.btns{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
 .add-btn{
     background-color: rgb(28, 122, 28) !important;
     color: white !important;
 }
 
 .btn-red{
-    background-color: red !important;
+    background-color: rgb(228, 54, 54) !important;
     color: white !important;
 }
 
