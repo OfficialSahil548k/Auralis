@@ -16,7 +16,7 @@
           <i>Owned By ~<%= list.owner.username %></i>
           <br />
           <%=list.description%><br />
-          &#8377;<%=list.price.toLocaleString("en-In")%> <br />
+          &#8377;<%=list.price.toLocaleString("en-In")%>/night <br />
           <%=list.location%> <br />
           <%=list.country%>
         </p>
@@ -34,6 +34,8 @@
     </div>
   </div>
   <div class="col-8 offset-3">
+
+    <% if(CurrUser){ %>
     <hr />
     <h4>Leave a Review</h4>
     <form
@@ -68,21 +70,25 @@
       <button type="submit" class="btn btn-outline-dark">Submit</button>
     </form>
     <br />
+    <% } %>
+    <hr>
     <p><b>All Reviews :</b></p>
     <div class="row">
       <% for(rev of list.reviews) {%>
       <div class="card col-5 ms-3 mb-3">
         <div class="card-body">
-          <h5 class="card-title">Sahil Sharma</h5>
+          <h5 class="card-title">@<%= rev.author.username %></h5>
           <p class="card-text">Comment : <b><%=rev.comment%></b></p>
           <p class="card-text">Rating : <b><%=rev.rating%></b> / 5</p>
         </div>
+        <% if(CurrUser && CurrUser._id.equals(rev.author._id)){ %>
         <form
           action="/listing/<%=list._id%>/reviews/<%=rev._id%>?_method=DELETE"
           method="POST"
         >
           <button class="btn btn-sm btn-red mb-2">Delete</button>
         </form>
+        <% } %>
       </div>
       <% } %>
     </div>

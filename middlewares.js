@@ -1,4 +1,5 @@
 const listing = require('./models/listing');
+const Review = require('./models/reviews.js');
 const { listingSchema, reviewSchema } = require("./Schema.js");
 const ExpressError = require("./utils/ExpressError.js");
 
@@ -23,7 +24,7 @@ module.exports.isOwner = async (req, res, next) => {
   const { id } = req.params;
   let list = await listing.findById(id);
   if (!list.owner._id.equals(req.user._id)) {
-    req.flash("error", "You are not the Owner of location posted");
+    req.flash("error", "You are not the Owner of this Location posted");
     return res.redirect(`/listing/${id}`);
   }
   next();
@@ -51,3 +52,13 @@ module.exports.validateReview = (req, res, next) => {
   }
   next();
 };
+
+module.exports.isReviewAuthor = async (req, res, next) => {
+  const { id, reviewId } = req.params;
+  let review = await Review.findById(reviewId);
+  if (!review.author._id.equals(res.locals.CurrUser._id)) {
+    req.flash("error", "You are not the author of this review");
+    return res.redirect(`/listing/${id}`);
+  }
+  next();
+}

@@ -37,7 +37,11 @@ router.get(
       );
     }
     const list = await listing.findById(id)
-      .populate("reviews")
+      .populate({path : "reviews", 
+        populate : {
+          path : "author",
+        },
+      })
       .populate("owner");
     if (!list) {
       req.flash("error", "location You Requested not found");
