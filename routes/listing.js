@@ -4,25 +4,26 @@ const WrapAsync = require("../utils/WrapAsync.js");
 const { isLoggedIn, isOwner, validateListing } = require('../middlewares.js');
 const ListingController = require('../controllers/listing.js');
 
-// Index route
-router.get("/",WrapAsync(ListingController.index));
+router
+    .route('/')
+    .get(WrapAsync(ListingController.index))
+    .post(
+        isLoggedIn,
+        validateListing,
+        WrapAsync(ListingController.createNew)
+    );
 
-//new page
+    //new page
 router.get("/new", isLoggedIn,ListingController.renderNewForm);
 
-//show route
-router.get("/:id",WrapAsync(ListingController.renderShowPage));
+router
+    .route('/:id')
+    .get(WrapAsync(ListingController.renderShowPage)) // show route
+    .put(isLoggedIn,isOwner,validateListing,WrapAsync(ListingController.updateInfo)) // update route
+    .delete(isLoggedIn,isOwner,WrapAsync(ListingController.destroyLocation)); // delete route
 
-// create route
-router.post("/",validateListing,WrapAsync(ListingController.createNew));
 
 //edit route
 router.get("/:id/edit",isLoggedIn,isOwner,WrapAsync(ListingController.renderEditForm));
-
-// update Route
-router.put("/:id",isLoggedIn,isOwner,validateListing,WrapAsync(ListingController.updateInfo));
-
-//Delete Route
-router.delete("/:id",isLoggedIn,isOwner,WrapAsync(ListingController.destroyLocation));
 
 module.exports = router;
