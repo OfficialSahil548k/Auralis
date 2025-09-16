@@ -8,6 +8,7 @@
         method="post"
         novalidate
         class="needs-validation"
+        enctype="multipart/form-data"
       >
         <label for="id">ID : </label> <%= list._id %> <br /><br />
         <div class="mb-3">
@@ -38,15 +39,12 @@
           </div>
         </div>
         <div class="mb-3">
-          <label for="image" class="form-label">Image Link : </label>
+          <label for="image" class="form-label">Upload New Image : </label>
           <input
-            type="url"
+            type="file"
             name="listing[image][url]"
-            placeholder="enter image URL/link"
             class="form-control"
-            value="<%=list.image.url%>"
           />
-          <div class="invalid-feedback">Please Provide the valid url.</div>
         </div>
         <div class="row">
           <div class="mb-3 col-md-4">
