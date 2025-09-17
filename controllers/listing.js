@@ -1,9 +1,9 @@
-const listing = require('../models/listing.js');
+const Listing = require('../models/listing.js');
 const ExpressError = require("../utils/ExpressError.js");
 const mongoose = require("mongoose");
 
 module.exports.index = async (req, res, next) => {
-    let allListing = await listing.find({});
+    let allListing = await Listing.find({});
     res.render("listings/index.ejs", { allListing });
 }
 
@@ -18,13 +18,13 @@ module.exports.renderShowPage = async (req, res, next) => {
         return next(new ExpressError(400, "Id is not valid."));
     }
     // checks if the id exists in the listing collection.
-    const doc = await listing.findById(id);
+    const doc = await Listing.findById(id);
     if (!doc) {
         return next(
             new ExpressError(404, "Location not found or has been deleted.")
         );
     }
-    const list = await listing.findById(id)
+    const list = await Listing.findById(id)
         .populate({
             path: "reviews",
             populate: {
@@ -42,7 +42,7 @@ module.exports.renderShowPage = async (req, res, next) => {
 module.exports.createNew = async (req, res, next) => {
     let url = req.file.path;
     let filename = req.file.filename;
-    const newListing = new listing(req.body.listing);
+    const newListing = new Listing(req.body.listing);
     newListing.owner = req.user._id;
     newListing.image = { url, filename };
     await newListing.save();
@@ -52,7 +52,7 @@ module.exports.createNew = async (req, res, next) => {
 
 module.exports.renderEditForm = async (req, res) => {
     const { id } = req.params;
-    const list = await listing.findById(id);
+    const list = await Listing.findById(id);
     if (!list) {
         req.flash("error", "location You Requested not found");
         res.redirect("/listing");
@@ -65,12 +65,11 @@ module.exports.updateInfo = async (req, res) => {
     if (!req.body || !req.body.listing) {
         throw new ExpressError(400, "Send Valid data of location");
     }
-    let listing = await listing.findOneAndUpdate({ _id: id }, req.body.listing);
-    if(typeof req.file !== 'undefined'){
-    let url = req.file.path;
-    let filename = req.file.filename;
-    listing.image = { url, filename };
-    await listing.save();
+    let listing = await Listing.findOneAndUpdate({ _id: id }, req.body.listing);
+    if (req.file) {
+        const { path: url, filename } = req.file;
+        listing.image = { url, filename };
+        await listing.save();
     }
     req.flash("success", "Successfully edited the location");
     res.redirect(`/listing/${id}`);
@@ -78,7 +77,7 @@ module.exports.updateInfo = async (req, res) => {
 
 module.exports.destroyLocation = async (req, res) => {
     const { id } = req.params;
-    await listing.findByIdAndDelete({ _id: id });
+    await Listing.findByIdAndDelete({ _id: id });
     console.log("Successfully deleted");
     req.flash("success", "Location Deleted");
     res.redirect("/listing");
